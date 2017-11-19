@@ -16,7 +16,7 @@
                 <?php } ?>
                 <div class="form-group">
                     <label for="pwd">Comment</label>
-                    <textarea type="password" class="form-control" id="pwd" id="minmessage" name="comment"></textarea>
+                    <textarea type="password" class="form-control" id="minmessage" name="comment"></textarea>
                 </div>
             </div>
             <div>
@@ -33,10 +33,10 @@
           <h4><?php echo mb_strimwidth($comment['user_name'], 0, 37, "...");?></h4>
           <!-- <div class="center"><img src="/template/img/news/<?php echo $comment['id'];?>.jpg"></div> -->
           <p id="comment" onclick="$(this).hide(); $('.comment_edit<?= $comment['id']; ?>').show();"><?= 'Comment: ' . $comment['comment'];?></p>
-          <input type="text" class="comment_edit<?= $comment['id']; ?>" value="<?= $comment['comment'];?>" name="comment-edit" style="display: none;">
+          <input type="text" id="edit-minmessage" class="comment_edit<?= $comment['id']; ?>" value="<?= $comment['comment'];?>" name="comment-edit" style="display: none;">
           <input type="text" name="comment-id" value="<?= $comment['id']; ?>" style="display: none;">
           <p align="center"><strong>Date: <?php echo $comment['created_at'];?></strong></p>
-          <input class="btn btn-default" id="submit" type="submit" name="submit" value="EDIT">
+          <button class="center-block btn btn-default" id="edit-submit" type="submit" name="submit" value="EDIT">EDIT</button>
         </div>
         </form>
       </div>

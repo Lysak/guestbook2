@@ -1,11 +1,11 @@
 <?php
 class Blog
 {
-    public $id;
-    public $userId;
-    public $userName;
-    public $comment;
-    public $createAd;
+    // public $id;
+    // public $userId;
+    // public $userName;
+    // public $comment;
+    // public $createAd;
     
     public static function getStart($page, $limit)
     {
