@@ -12,10 +12,6 @@ class SiteController {
     
     public function actionIndex()
     {
-        // echo ("'' => 'site/index'");
-        // echo '<br />';
-        // print_r($_POST);
-
         require_once ROOT."/models/Blog.php";
 
         if (isset($_SESSION['user_id'])) {
@@ -51,13 +47,6 @@ class SiteController {
             Blog::updateComment($comment);
         }
 
-        // $newsList = array();
-
-        
-        // текущая страница
-        // echo '<br/>';
-        // var_dump($comments);
-
         if ($this->page < 1 or $this->page == "") {
             $this->page = 1;
         }
@@ -81,7 +70,7 @@ class SiteController {
         $page = $this->page;
         
         require_once(ROOT . '/views/index.php');
-        return true; // Warning: call_user_func_array() expects parameter 1 to be a valid callback, class 'SiteController' does not have a method 'actionIndexisite' in /var/www/guestbook.loc/components/Router.php on line 35
+        return true; // if there is no return will be an error: Warning: call_user_func_array()
     }
 
     public function paginate($limit) 

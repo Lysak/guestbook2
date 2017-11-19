@@ -4,11 +4,11 @@ include_once ROOT. '/models/Blog.php';
 
 class BlogController 
 {
-    public $id;
-    public $userId;
-    public $userName;
-    public $comment;
-    public $createAd;
+    // public $id;
+    // public $userId;
+    // public $userName;
+    // public $comment;
+    // public $createAd;
     
     public function actionIndex()
     {
@@ -18,15 +18,6 @@ class BlogController
         return true;
 
     }
-
-    public function actionView($id)
-    {
-        // $newsItem = array();
-        // $newsItem = Blog::getNewsItemByID($id);
-        // require_once(ROOT . '/views/blog/view.php');
-        // return true;
-    }
-
 
     public function actionAjax()
     {

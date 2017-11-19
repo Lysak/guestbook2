@@ -4,5 +4,5 @@
         'dbname'   => 'dbname',
         'user'     => 'user',
         'password' => 'password',
-        'salt' => 'salt',
+        'salt'     => 'salt',
     );

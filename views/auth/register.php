@@ -2,9 +2,19 @@
 <div id="login">
 	<h1>REGISTER</h1>
 	<form name="registerform" id="registerform" action="register" method="post">
+		<div style="color: red;">
+	        <?php foreach ($errors as $error) :?>
+	            <p><?php echo $error; ?></p>
+	        <?php endforeach; ?>
+	    </div>
 		<p>
-			<label for="user_login">Full Name<br />
-			<input type="text" name="full_name" id="full_name" class="input" size="32" value=""  /></label>
+			<label for="user_login">First Name<br />
+			<input type="text" name="first_name" id="first_name" class="input" size="32" value=""  /></label>
+		</p>
+
+		<p>
+			<label for="user_login">Last Name<br />
+			<input type="text" name="last_name" id="last_name" class="input" size="32" value=""  /></label>
 		</p>
 		
 		

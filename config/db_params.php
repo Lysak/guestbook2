@@ -4,5 +4,5 @@
         'dbname'   => 'guestbook',
         'user'     => 'root',
         'password' => '1',
-        'salt' => 'lysakqQwordpresstest',
+        'salt'     => 'lysakqQwordpresstest',
     );

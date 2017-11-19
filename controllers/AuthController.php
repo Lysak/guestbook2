@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lysak
- * Date: 31.08.17
- * Time: 0:30
- */
-
 include_once ROOT. '/models/Auth.php';
 
 class AuthController
@@ -13,33 +6,34 @@ class AuthController
 
     public function actionLogin()
     {
-        require_once(ROOT . '/views/auth/login.php');
-
-        if (!isset($_SESSION)) {
-            session_start();
+        
+        if (!empty($_SESSION['user_id'])) {
+            header("location: /index/");
         }
-
-        if (isset($_SESSION["session_username"])) {
-            header("Location: intropage");
+        $errors = [];
+        $idRegistered = 0;
+        if (!empty($_GET['registration'])) {
+            $idRegistered = 1;
         }
-
-        if (isset($_POST["login"])) {
-            if (!empty($_POST['username']) && !empty($_POST['password'])) {
-
-                $username = $_POST['username'];
-                $password = $_POST['password'];
-
-                Auth::checkUserData($userName, $password);
-
-            } else {
-            $message =  "Invalid username or password!";
+        if (!empty($_POST)) {
+            if (empty($_POST['username'])) {
+                $errors[] = 'Please enter User Name / Email';
             }
-        } else {
-            $message = "All fields are required!";
+            if (empty($_POST['password'])) {
+                $errors[] = 'Please enter password';
+            }
+            if (empty($errors)) {
+                $salt = Auth::getSalt();
+                $user = Auth::checkUserData($_POST['username'], sha1($_POST['password'].$salt));
+                if (!empty($user->id)) {
+                    $_SESSION['user_id'] = $user->id;
+                    header("location: /index/");
+                } else {
+                    $errors[] = 'Please enter valid credentials';
+                }
+            }
         }
-
-        if (!empty($message)) {echo "<p class=\"error\">" . "MESSAGE: ". $message . "</p>";}
-
+        require_once(ROOT . '/views/auth/login.php');
         return true;
     }
 
@@ -51,7 +45,7 @@ class AuthController
             session_start();
         }
         if(!isset($_SESSION["session_username"])) {
-            header("location:login.php");
+            header("location:login/");
         } else {
             require_once(ROOT . '/views/auth/intropage.php');
         }
@@ -63,30 +57,61 @@ class AuthController
         session_start();
         unset($_SESSION['session_username']);
         session_destroy();
-        header("location:login");
+        header("location:index/");
         return true;
     }
 
     public function actionRegister()
     {
+        if (!empty($_SESSION['user_id'])) {
+            header("location: /index/");
+        }
+        $errors = [];
+        if (!empty($_POST)) {
+            if (empty($_POST['username'])) {
+                $errors[] = 'Please enter User Name';
+            }
+            if (empty($_POST['email'])) {
+                $errors[] = 'Please enter email';
+            }
+            if (empty($_POST['first_name'])) {
+                $errors[] = 'Please enter First Name';
+            }
+            if (empty($_POST['last_name'])) {
+                $errors[] = 'Please enter Last Name';
+            }
+            if (empty($_POST['password'])) {
+                $errors[] = 'Please enter password';
+            }
+            if (strlen($_POST['username']) > 100) {
+                $errors[] = 'User name is too long. Max length is 100 characters';
+            }
+            if (strlen($_POST['first_name']) > 80) {
+                $errors[] = 'First name is too long. Max length is 80 characters';
+            }
+            if (strlen($_POST['last_name']) > 150) {
+                $errors[] ='Last name is too long. Max length is 150 characters';
+            }
+            if (strlen($_POST['password']) < 6) {
+                $errors[] = 'Password should contain at least 6 characters';
+            }
+        }
+
         require_once(ROOT . '/views/auth/register.php');
-
-        if(isset($_POST["register"])) {
-
-
-            if(!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
-                $full_name=$_POST['full_name'];
-                $email=$_POST['email'];
-                $username=$_POST['username'];
-                $password=$_POST['password'];
+        if(empty($errors) && isset($_POST["register"])) {
+            if(!empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
+                $first_name = $_POST['first_name'];
+                $last_name = $_POST['last_name'];
+                $email = $_POST['email'];
+                $username = $_POST['username'];
+                $password = $_POST['password'];
 
                 $numrows = Auth::checkTheUserName($username);
 
                 if($numrows==0)
                 {
-                    $result = Auth::addUserDataInDB($full_name, $email, $username, $password);
-
-
+                    $salt = Auth::getSalt();
+                    $result = Auth::addUserDataInDB($first_name, $last_name, $email, $username, sha1($password . $salt));
                     if($result){
                         $message = "Account Successfully Created";
                     } else {

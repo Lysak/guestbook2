@@ -1,5 +1,5 @@
 
-<footer class="site">Some rights reserved, 2017&nbsp;<a href="https://lysak.me/" target="_blank">lysak.me</a></footer>
+<footer class="site">Some rights reserved, 2017&nbsp;<a href="https://lysak.github.io/" target="_blank">lysak.github.io</a></footer>
 
 </div>
 

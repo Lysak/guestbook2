@@ -11,7 +11,7 @@
             return $db;
         }
 
-        public function getSalt()
+        public static function getSalt()
         {
             $paramsPath = ROOT . '/config/db_params.php';
             $params = include($paramsPath);
