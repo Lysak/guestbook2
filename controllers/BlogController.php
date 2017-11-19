@@ -12,37 +12,8 @@ class BlogController
     
     public function actionIndex()
     {
-        echo ("'blog' => 'blog/index'");
-        
-        $dbUsername = DB::addCommentWithActualRegisterUsername();
-        // var_dump($this->userName);
-        
-        if ($dbUsername["username"] == 'unknown') {
-            $dbUsername = $this->userName;
-        } else {
-            $dbUsername = $dbUsername["username"];
-        }
-        
-        $id = DB::
-    
+        $comments = Blog::getNewsList(0, 4);
 
-
-    //     $newsList = array();
-    //     $newsList2 = array();
-    //     $add = array();
-        $newsList = Blog::getNewsList(0, 3);
-    //     foreach($newsList as $postItem){
-    //         $rowCount = Blog::ifUserHasAlreadyLikeThisPost($postItem);
-    //         // print_r($postItem);
-    //         $add = ['if_like' => $rowCount];
-    //         $postItem = array_merge($postItem, $add);
-    //         array_push($newsList2, $postItem);
-    //    }
-    //     // echo '<pre>';
-    //     // print_r($newsList2);
-    //     // echo '</pre>';
-        
-    //     Blog::getLikes();
         require_once(ROOT . '/views/blog/list.php');
         return true;
 
@@ -59,46 +30,19 @@ class BlogController
 
     public function actionAjax()
     {
-    //     // echo "hello ajax";
-    //     $db = DB::getConnection();
-        
-    //     // C какой статьи будет осуществляться вывод
-    //     $startFrom = $_POST['startFrom'];
-    //     // $startFrom = 0;
-    
-    //     // Получаем 3 статей, начиная с последней отображенной
-    //     $res = $db->query("SELECT * FROM `articles` ORDER BY `id` DESC LIMIT {$startFrom}, 3");
-    
-    //     // Формируем массив со статьями
-    //     $articles = array();
-    //     while ($row = $res->fetch(PDO::FETCH_ASSOC))
-    //     {
-    //         $articles[] = $row;
-    //     }
-        
+        $db = DB::getConnection();
+        $startFrom = $_POST['startFrom'];
 
-    //     // echo '<pre>';
-    //     // print_r($articles);
-    //     // echo '</pre>';
-        
-    //     //
-    //     // $newsList = array();
-    //     $newsList2 = array();
-    //     $add = array();
-    //     // $newsList = Blog::getNewsList(0, 3);
-    //     foreach($articles as $postItem){
-    //         $rowCount = Blog::ifUserHasAlreadyLikeThisPost($postItem);
-    //         // print_r($postItem);
-    //         $add = ['if_like' => $rowCount];
-    //         $postItem = array_merge($postItem, $add);
-    //         array_push($newsList2, $postItem);
-    //    }
-    //     // echo '<pre>';
-    //     // print_r($newsList2);
-    //     // echo '</pre>';
-    //     //
-    //     // Превращаем массив статей в json-строку для передачи через Ajax-запрос
-    //     echo json_encode($newsList2);
-        // return true;
+        $res = $db->prepare("SELECT * FROM `comments` ORDER BY created_at DESC LIMIT {$startFrom}, 3");
+        $res->execute();
+
+        $articles = array();
+        while ($row = $res->fetch(PDO::FETCH_ASSOC))
+        {
+            $articles[] = $row;
+        }
+
+        echo json_encode($articles);
+        return true;
     }
 } 

@@ -1,34 +1,5 @@
 <?php include ROOT . '/views/layouts/header.php'; ?>
-    <!-- <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="/template/img/news/1.jpg" alt="IMG1">
-        </div>
-
-        <div class="item">
-          <img src="/template/img/news/2.jpg" alt="IMG2">
-        </div>
-
-        <div class="item">
-          <img src="/template/img/news/3.jpg" alt="IMG3">
-        </div>
-      </div>
-      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-        <span class="icon-prev" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-        <span class="icon-next" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div> -->
 </header>
-
   <div class="jumbotron">
       <h1>GUEST BOOK</h1>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa consequatur voluptate delectus eveniet quo. Tempore!</p>
@@ -55,19 +26,23 @@
     </div>
     <div>
     <?php /** @var $comments */
-    foreach ($comments as $newsItem):?>
+    foreach ($comments as $comment):?>
       <div class="col-lg-12 six">
+        <form method="GET">
         <div class="thumbnail">
-          <h4><?php echo mb_strimwidth($newsItem['user_name'], 0, 37, "...");?></h4>
-          <!-- <div class="center"><img src="/template/img/news/<?php echo $newsItem['id'];?>.jpg"></div> -->
-          <p><?php echo mb_strimwidth($newsItem['comment'], 0, 40, "...");?></p>
-          <p align="center"><strong>Date: <?php echo $newsItem['created_at'];?></strong></p>
-          <!-- <p align="center"><a href="/blog/<?php echo $newsItem['id'];?>" class="btn btn-primary" role="button">Читати</a></p> -->
+          <h4><?php echo mb_strimwidth($comment['user_name'], 0, 37, "...");?></h4>
+          <!-- <div class="center"><img src="/template/img/news/<?php echo $comment['id'];?>.jpg"></div> -->
+          <p id="comment" onclick="$(this).hide(); $('.comment_edit<?= $comment['id']; ?>').show();"><?= 'Comment: ' . $comment['comment'];?></p>
+          <input type="text" class="comment_edit<?= $comment['id']; ?>" value="<?= $comment['comment'];?>" name="comment-edit" style="display: none;">
+          <input type="text" name="comment-id" value="<?= $comment['id']; ?>" style="display: none;">
+          <p align="center"><strong>Date: <?php echo $comment['created_at'];?></strong></p>
+          <input class="btn btn-default" id="submit" type="submit" name="submit" value="EDIT">
         </div>
+        </form>
       </div>
     <?php endforeach; ?>
   </div>
-  <!-- <div class="paginate">
+  <div class="paginate">
     <ul class="pagination justify-content-center">
     <?php if ($count_pages > 1) { ?>
         <?php if ($page == 1) { ?>
@@ -104,6 +79,6 @@
         <?php } ?>
     <?php } ?>
     </ul>
-  </div>  -->
+  </div>
 
 <?php include ROOT . '/views/layouts/footer.php'; ?>

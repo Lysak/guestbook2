@@ -8,6 +8,8 @@
         // 'contacts'      => 'site/contact',
 
         'index'         => 'site/index',
+        // '\?comment-edit=([\s\S]+)&submit=EDIT'      => 'site/index',
+        '\?.+'          => 'site/index', //\?.+ //\?comment-edit.+
         'login'         => 'auth/login',
         'logout'        => 'auth/logout',
         // 'intropage'     => 'auth/intropage',

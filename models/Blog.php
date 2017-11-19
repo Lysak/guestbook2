@@ -28,7 +28,7 @@ class Blog
 
     public static function getStart($page, $limit)
     {
-        // return $limit * ($page - 1);
+        return $limit * ($page - 1);
     }
 
     public static function getNewsList($start, $limit)
@@ -128,19 +128,51 @@ class Blog
     }
 
     static function countArticles() {
-        // $db = DB::getConnection();
-        // $result = $db->query("SELECT COUNT(`id`) FROM `comments`");
-        // $result = ($row = $result->fetch());
-        // return $result[0];
+        $db = DB::getConnection();
+        $result = $db->query("SELECT COUNT(`id`) FROM `comments`");
+        $result = ($row = $result->fetch());
+        return $result[0];
     }
 
-    public static function addCommentWithActualRegisterUsername()
+    // public static function addCommentWithActualRegisterUsername($comment)
+    // {
+    //     $db = DB::getConnection();
+    //     $stmt = $db->prepare('SELECT username FROM users WHERE id = :userid');
+    //     $stmt->execute(array('userid' => $this->userId));
+
+    //     $dbUsername = $stmt->fetch(PDO::FETCH_ASSOC);
+    //     return $dbUsername;
+    // }
+
+    public static function addComment($comment)
     {
         $db = DB::getConnection();
         $stmt = $db->prepare('SELECT username FROM users WHERE id = :userid');
-        $stmt->execute(array('userid' => $this->userId));
+        $stmt->execute(array('userid' => $comment['userId']));
 
         $dbUsername = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $dbUsername;
+        // var_dump($this->userName);
+        
+        if ($dbUsername["username"] == 'unknown') {
+            $dbUsername = $comment["userName"];
+        } else {
+            $dbUsername = $dbUsername["username"];
+        }
+        
+        $stmt = $db->prepare('INSERT INTO comments(`user_id`, `user_name`, `comment`) VALUES(:user_id, :user_name, :comment)');
+        $stmt->execute(array('user_id' => $comment['userId'], 'user_name' => $dbUsername, 'comment' => $comment['comment']));
+        $comment['id'] = $db->lastInsertId();
+
+        return $comment['id'];
+    }
+
+    public static function updateComment($comment)
+    {
+        $db = DB::getConnection();
+        $stmt = $db->prepare('UPDATE comments SET comment = :comment_edit WHERE id = :id');
+        $stmt->execute(array('id' => $comment['id'], 'comment_edit' => $comment['comment']));
+        $comment['id'] = $db->lastInsertId();
+
+        return $comment['id'];
     }
 }
